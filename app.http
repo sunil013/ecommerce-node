@@ -1,0 +1,58 @@
+POST http://localhost:3003/register/
+Content-Type: application/json
+
+{
+  "username": "srikanth",
+  "password": "Srikanth@2022",
+  "name": "srikanth devabattula",
+  "gender": "male"
+}
+
+###
+POST http://localhost:3003/login/
+Content-Type: application/json
+
+{
+  "username":"sunil",
+  "password":"Sunil@013"
+}
+
+# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1bmlsIiwiaWF0IjoxNjcxNzg0OTkyfQ.taRI41QqDvv_VfumigDkKlSJ_XayozU0T3e7eT4iJHs
+
+###
+POST http://localhost:3003/insert/
+Content-Type: application/json
+
+{
+"name":"Women Red Solid Hooded Sweatshirt",
+"brand":"Roadster",
+"price":714,
+"originalPrice":1099,
+"rating":4.3,
+"gender":"Women",
+"category": "clothing",
+"description":"Red solid sweatshirt, has a hood, one kangaroo pockets, long sleeves, ribbed hem Material: 50% Cotton, 50% Polyester Machine Wash.",
+"totalRatings":2500,
+"availability": "In Stock",
+"imageUrl1":"https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/11991110/2020/8/25/2150a867-6daf-4d25-adb0-987ab33e57691598353666667-Roadster-Women-Sweatshirts-2341598353665308-1.jpg",
+"imageUrl2":"https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/11991110/2020/8/25/71714949-c449-4943-a409-126103d719291598353666484-Roadster-Women-Sweatshirts-2341598353665308-4.jpg",
+"imageUrl3":"https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/11991110/2020/8/25/b0df85f7-8caf-4f22-82da-d263f4ca5ce61598353666613-Roadster-Women-Sweatshirts-2341598353665308-2.jpg",
+"imageUrl4":"https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/11991110/2020/8/25/00587736-2e5c-4585-b552-3998287697461598353666559-Roadster-Women-Sweatshirts-2341598353665308-3.jpg",
+"imageUrl5":"https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/11991110/2020/8/25/038a30f7-47e1-45fd-8b16-01381628379a1598353666409-Roadster-Women-Sweatshirts-2341598353665308-5.jpg"
+}
+
+###
+GET http://localhost:3003/products?sort_by=RECOMMENDED&category=clothing&title_search=&rating=
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1bmlsIiwiaWF0IjoxNjcxNzg0OTkyfQ.taRI41QqDvv_VfumigDkKlSJ_XayozU0T3e7eT4iJHs
+
+###
+GET http://localhost:3003/products/72/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1bmlsIiwiaWF0IjoxNjcxNzg0OTkyfQ.taRI41QqDvv_VfumigDkKlSJ_XayozU0T3e7eT4iJHs
+
+###
+GET http://localhost:3003/latest/products/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1bmlsIiwiaWF0IjoxNjcxNzg0OTkyfQ.taRI41QqDvv_VfumigDkKlSJ_XayozU0T3e7eT4iJHs
+
+###
+GET http://localhost:3003/trending/products/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1bmlsIiwiaWF0IjoxNjcxNzg0OTkyfQ.taRI41QqDvv_VfumigDkKlSJ_XayozU0T3e7eT4iJHs
