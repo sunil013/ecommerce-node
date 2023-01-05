@@ -3,6 +3,7 @@ const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
 const path = require("path");
 const bcrypt = require("bcrypt");
+const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
 const databasePath = path.join(__dirname, "nxtTrendz.db");
@@ -31,6 +32,12 @@ const initializeDbAndServer = async () => {
 
 initializeDbAndServer();
 
+app.use(
+  cors({
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  })
+);
+
 function authenticateToken(request, response, next) {
   let jwtToken;
   const authHeader = request.headers["authorization"];
@@ -53,7 +60,7 @@ function authenticateToken(request, response, next) {
   }
 }
 
-app.post("/register/", async (request, response) => {
+app.post("/register/", cors(), async (request, response) => {
   const { username, password, name, gender } = request.body;
   const hashedPassword = await bcrypt.hash(password, 10);
   const getUserQuery = `select * from user where username = '${username}';`;
@@ -108,7 +115,7 @@ app.post("/insert/", async (request, response) => {
 });
 
 // login API
-app.post("/login/", async (request, response) => {
+app.post("/login/", cors(), async (request, response) => {
   const { username, password } = request.body;
   const selectUserQuery = `SELECT * FROM user WHERE username = '${username}';`;
   const databaseUser = await db.get(selectUserQuery);
@@ -135,7 +142,7 @@ app.post("/login/", async (request, response) => {
 });
 
 // products API
-app.get("/products/", authenticateToken, async (request, response) => {
+app.get("/products/", cors(), authenticateToken, async (request, response) => {
   const { sort_by, category = "", title_search = "", rating } = request.query;
   const searchLower = title_search.toLowerCase();
   const ratingInt = rating === "" ? 1 : parseInt(rating);
@@ -165,39 +172,54 @@ app.get("/products/", authenticateToken, async (request, response) => {
 module.exports = app;
 
 // product details api and similar products
-app.get("/products/:id/", authenticateToken, async (request, response) => {
-  const { id } = request.params;
-  const productCategoryQuery = `select category from products where id = ${id}`;
-  const categoryObj = await db.get(productCategoryQuery);
-  const categoryType = categoryObj.category;
-  const getProductDetailsQuery = `
+app.get(
+  "/products/:id/",
+  cors(),
+  authenticateToken,
+  async (request, response) => {
+    const { id } = request.params;
+    const productCategoryQuery = `select category from products where id = ${id}`;
+    const categoryObj = await db.get(productCategoryQuery);
+    const categoryType = categoryObj.category;
+    const getProductDetailsQuery = `
    select * from products where id = ${id}
   `;
-  const data = await db.get(getProductDetailsQuery);
-  const similarProductsQuery = `
+    const data = await db.get(getProductDetailsQuery);
+    const similarProductsQuery = `
     select id,name,brand,price,original_price,rating,image_url1 from products
     where id <> ${id} and category like '%${categoryType}%' limit 5
   `;
-  const similarProducts = await db.all(similarProductsQuery);
-  const productsData = {
-    productDetails: data,
-    similarProducts: similarProducts,
-  };
-  response.send(productsData);
-});
+    const similarProducts = await db.all(similarProductsQuery);
+    const productsData = {
+      productDetails: data,
+      similarProducts: similarProducts,
+    };
+    response.send(productsData);
+  }
+);
 
-app.get("/latest/products/", authenticateToken, async (request, response) => {
-  const latestProductsQuery = `
+app.get(
+  "/latest/products/",
+  cors(),
+  authenticateToken,
+  async (request, response) => {
+    const latestProductsQuery = `
      select id,name,brand,price,original_price,rating,image_url1 from products limit 6 offset 60
    `;
-  const latestProducts = await db.all(latestProductsQuery);
-  response.send(latestProducts);
-});
+    const latestProducts = await db.all(latestProductsQuery);
+    response.send(latestProducts);
+  }
+);
 
-app.get("/trending/products/", authenticateToken, async (request, response) => {
-  const trendingProductsQuery = `
+app.get(
+  "/trending/products/",
+  cors(),
+  authenticateToken,
+  async (request, response) => {
+    const trendingProductsQuery = `
      select id,name,brand,price,original_price,rating,image_url1,image_url2 from products limit 6 offset 66
    `;
-  const trendingProducts = await db.all(trendingProductsQuery);
-  response.send(trendingProducts);
-});
+    const trendingProducts = await db.all(trendingProductsQuery);
+    response.send(trendingProducts);
+  }
+);
