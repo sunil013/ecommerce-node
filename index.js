@@ -115,7 +115,7 @@ app.post("/insert/", async (request, response) => {
 });
 
 // login API
-app.post("/login/", async (request, response) => {
+app.post("/login/", cors(), async (request, response) => {
   const { username, password } = request.body;
   const selectUserQuery = `SELECT * FROM user WHERE username = '${username}';`;
   const databaseUser = await db.get(selectUserQuery);
